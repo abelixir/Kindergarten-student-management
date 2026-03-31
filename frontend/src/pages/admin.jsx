@@ -1,7 +1,11 @@
 
 function Admin(){
-return(
-    <p>admin</p>
+return(<>
+  <p>admin</p>
+
+</>
+  
+    
 )   
 }
 export default Admin;

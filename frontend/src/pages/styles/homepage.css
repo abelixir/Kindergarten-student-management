@@ -1,0 +1,82 @@
+/* HomePage.css - Enhanced Bluish Background with Professional Look */
+
+.homepage-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+/* Background image with strong bluish tint, high quality feel */
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: 
+    brightness(65%) 
+    contrast(105%) 
+    saturate(120%) 
+    blur(3px);   /* slightly more blur for elegance */
+  
+  /* This gives a pure, high-quality bluish overlay */
+  background-color: #1e3a5f; 
+}
+
+/* Optional: Add a pure blue overlay layer for even cleaner bluish tone */
+.hero-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(30, 58, 95, 0.45),   /* deep blue tint */
+    rgba(30, 58, 95, 0.55)
+  );
+  pointer-events: none;
+}
+
+/* Overlay for text and button */
+.hero-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fffaea;
+  z-index: 2;
+}
+
+/* Title text - Changed to a soft elegant white with slight warmth */
+.hero-overlay h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(255, 255, 255, 0.1);
+  color: #e0f2ff;        /* Light sky blue - pure and elegant */
+  letter-spacing: 1px;
+}
+
+/* Login Button - Kept attractive but balanced */
+.login-button {
+  padding: 16px 55px;
+  background-color: #ffb703;     /* Bright gold */
+  color: #0d1b2a;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 50px;           /* Softer, modern pill shape */
+  text-decoration: none;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  display: inline-block;
+}
+
+.login-button:hover {
+  background-color: #faa307;
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 12px 30px rgba(255, 183, 3, 0.4);
+}
