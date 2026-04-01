@@ -1,9 +1,10 @@
+// routes/students.js
 const express = require("express");
 const router = express.Router();
 const Student = require("../models/Student");
 const User = require("../models/User");
 
-// GET students
+// GET students (with filters)
 router.get("/", async (req, res) => {
   const { classLevel, teacherId, parentId } = req.query;
   try {
@@ -15,22 +16,23 @@ router.get("/", async (req, res) => {
     const students = await Student.find(query)
       .populate("teacherId", "name")
       .populate("parentId", "name email");
-    res.json(students);
+
+    res.json(students);   // This must return array
   } catch (err) {
+    console.error("Get students error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// POST - Add student + create parent if needed
+// POST - Add student + create parent if not exists
 router.post("/", async (req, res) => {
   try {
     const { name, classLevel, parentName, parentEmail, parentPassword, parentPhone, teacherId } = req.body;
 
     if (!name || !classLevel || !parentEmail || !parentPassword || !parentPhone || !teacherId) {
-      return res.status(400).json({ message: "Missing required fields: name, classLevel, parentEmail, parentPassword, parentPhone, teacherId" });
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Create or find parent
     let parent = await User.findOne({ email: parentEmail });
     if (!parent) {
       parent = new User({
@@ -56,9 +58,9 @@ router.post("/", async (req, res) => {
       .populate("teacherId", "name")
       .populate("parentId", "name email");
 
-    res.json(populatedStudent);
+    res.status(201).json(populatedStudent);
   } catch (err) {
-    console.error("Add student error:", err);
+    console.error(err);
     if (err.code === 11000) {
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -73,10 +75,42 @@ router.put("/:id", async (req, res) => {
       req.params.id, 
       req.body, 
       { new: true }
-    ).populate("teacherId", "name").populate("parentId", "name email");
-    
+    )
+      .populate("teacherId", "name")
+      .populate("parentId", "name email");
+
+    if (!updated) return res.status(404).json({ message: "Student not found" });
+
     res.json(updated);
   } catch (err) {
+    console.error("Update student error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// DELETE student + linked parent (only if no other students)
+router.delete("/:id", async (req, res) => {
+  try {
+    const student = await Student.findById(req.params.id);
+    if (!student) return res.status(404).json({ message: "Student not found" });
+
+    // Delete parent only if this is the only student for that parent
+    if (student.parentId) {
+      const otherStudentsCount = await Student.countDocuments({
+        parentId: student.parentId,
+        _id: { $ne: student._id }
+      });
+
+      if (otherStudentsCount === 0) {
+        await User.findByIdAndDelete(student.parentId);
+      }
+    }
+
+    await Student.findByIdAndDelete(req.params.id);
+
+    res.json({ message: "Student deleted successfully" });
+  } catch (err) {
+    console.error("Delete student error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });

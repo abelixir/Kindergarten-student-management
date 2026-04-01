@@ -1,3 +1,4 @@
+// src/components/admin-manage-teachers.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./styles/admin-manage-teachers.css";
@@ -5,30 +6,22 @@ import "./styles/admin-manage-teachers.css";
 function ManageTeachers() {
   const [teachers, setTeachers] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [mode, setMode] = useState("add");
+  const [mode, setMode] = useState("add"); // add, edit, delete
   const [selectedTeacher, setSelectedTeacher] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
 
   useEffect(() => {
     fetch("http://localhost:5000/api/teachers")
-      .then((res) => res.json())
-      .then((data) => setTeachers(data))
-      .catch((err) => console.error(err));
+      .then(res => res.json())
+      .then(data => setTeachers(Array.isArray(data) ? data : []))
+      .catch(err => console.error("Failed to load teachers", err));
   }, []);
 
   const openModal = (type, teacher = null) => {
     setMode(type);
     setSelectedTeacher(teacher);
     if (teacher) {
-      setFormData({
-        name: teacher.name,
-        email: teacher.email,
-        password: "",
-      });
+      setFormData({ name: teacher.name, email: teacher.email, password: "" });
     } else {
       setFormData({ name: "", email: "", password: "" });
     }
@@ -38,36 +31,45 @@ function ManageTeachers() {
   const closeModal = () => setShowModal(false);
 
   const handleSubmit = async () => {
-    if (mode === "add") {
-      const res = await fetch("http://localhost:5000/api/teachers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      setTeachers([...teachers, data]);
+    try {
+      if (mode === "add") {
+        const res = await fetch("http://localhost:5000/api/teachers", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        const newTeacher = await res.json();
+        if (res.ok) {
+          setTeachers([...teachers, newTeacher]);
+        }
+      } 
+      else if (mode === "edit") {
+        const res = await fetch(`http://localhost:5000/api/teachers/${selectedTeacher._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        if (res.ok) {
+          setTeachers(teachers.map(t =>
+            t._id === selectedTeacher._id ? { ...t, ...formData } : t
+          ));
+        }
+      } 
+      else if (mode === "delete") {
+        const res = await fetch(`http://localhost:5000/api/teachers/${selectedTeacher._id}`, {
+          method: "DELETE",
+        });
+        if (res.ok) {
+          setTeachers(teachers.filter(t => t._id !== selectedTeacher._id));
+          alert("Teacher and all related students/parents deleted permanently.");
+        } else {
+          alert("Failed to delete teacher");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Operation failed");
     }
-
-    if (mode === "edit") {
-      await fetch(`http://localhost:5000/api/teachers/${selectedTeacher._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      setTeachers(
-        teachers.map((t) =>
-          t._id === selectedTeacher._id ? { ...t, ...formData } : t
-        )
-      );
-    }
-
-    if (mode === "delete") {
-      await fetch(`http://localhost:5000/api/teachers/${selectedTeacher._id}`, {
-        method: "DELETE",
-      });
-      setTeachers(teachers.filter((t) => t._id !== selectedTeacher._id));
-    }
-
     closeModal();
   };
 
@@ -100,16 +102,10 @@ function ManageTeachers() {
                   <td>{teacher.name}</td>
                   <td>{teacher.email}</td>
                   <td>
-                    <button 
-                      className="edit-btn"
-                      onClick={() => openModal("edit", teacher)}
-                    >
+                    <button className="edit-btn" onClick={() => openModal("edit", teacher)}>
                       Edit
                     </button>
-                    <button 
-                      className="delete-btn"
-                      onClick={() => openModal("delete", teacher)}
-                    >
+                    <button className="delete-btn" onClick={() => openModal("delete", teacher)}>
                       Delete
                     </button>
                   </td>
@@ -122,10 +118,9 @@ function ManageTeachers() {
         )}
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h2>
                 {mode === "add" && "Add New Teacher"}
@@ -152,14 +147,14 @@ function ManageTeachers() {
                   />
                   <input
                     type="password"
-                    placeholder="Password (leave empty to keep current)"
+                    placeholder="Password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
                 </>
               ) : (
                 <p className="delete-text">
-                  Are you sure you want to delete <strong>{selectedTeacher?.name}</strong>?
+                  Are you sure you want to delete <strong>{selectedTeacher?.name}</strong> and all their students & parents?
                 </p>
               )}
             </div>
@@ -168,9 +163,7 @@ function ManageTeachers() {
               <button className="confirm-btn" onClick={handleSubmit}>
                 {mode === "delete" ? "Yes, Delete" : "Confirm"}
               </button>
-              <button className="cancel-btn" onClick={closeModal}>
-                Cancel
-              </button>
+              <button className="cancel-btn" onClick={closeModal}>Cancel</button>
             </div>
           </div>
         </div>
