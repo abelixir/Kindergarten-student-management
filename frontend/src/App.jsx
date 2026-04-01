@@ -8,7 +8,7 @@ import Login from "./pages/login";
 import Teachers from "./pages/teachers";
 import Admin from "./pages/admin";
 import Parent from "./pages/parent";
-
+import ManageTeachers from "./pages/admin-manage-teachers";
 function App() {
   return (
     <Router>
@@ -18,6 +18,7 @@ function App() {
         <Route path="/teacher" element={<Teachers />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/parent" element={<Parent />} />
+        <Route path="/admin-manage-teachers" element={<ManageTeachers />} /> 
       </Routes>
     </Router>
   );

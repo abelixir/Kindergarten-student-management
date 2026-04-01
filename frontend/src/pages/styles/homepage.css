@@ -1,82 +1,123 @@
-/* HomePage.css - Enhanced Bluish Background with Professional Look */
+/* homepage.css - Professional Glassmorphism with Background Image via CSS */
 
 .homepage-container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ 
   overflow: hidden;
 }
 
-/* Background image with strong bluish tint, high quality feel */
-.hero-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: 
-    brightness(65%) 
-    contrast(105%) 
-    saturate(120%) 
-    blur(3px);   /* slightly more blur for elegance */
-  
-  /* This gives a pure, high-quality bluish overlay */
-  background-color: #1e3a5f; 
-}
-
-/* Optional: Add a pure blue overlay layer for even cleaner bluish tone */
-.hero-image::after {
-  content: '';
+/* Background Image via CSS (No import needed) */
+.homepage-container::before {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    rgba(30, 58, 95, 0.45),   /* deep blue tint */
-    rgba(30, 58, 95, 0.55)
-  );
-  pointer-events: none;
+  background: url('../../pics/jLd6H.jpg') no-repeat center center/cover;
+  filter: brightness(60%) blur(4px);
+  z-index: -1;
 }
 
-/* Overlay for text and button */
+/* Top Navigation - Consistent with Admin */
+.top-nav {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: rgba(13, 27, 42, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 183, 3, 0.2);
+  z-index: 100;
+  padding: 18px 40px;
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.nav-content h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffb703;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Hero Overlay */
 .hero-overlay {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #fffaea;
+  color: white;
   z-index: 2;
+  max-width: 720px;
+  padding: 0 20px;
 }
 
-/* Title text - Changed to a soft elegant white with slight warmth */
 .hero-overlay h1 {
-  font-size: 3.2rem;
-  font-weight: 700;
-  margin-bottom: 40px;
-  text-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.6),
-    0 2px 8px rgba(255, 255, 255, 0.1);
-  color: #e0f2ff;        /* Light sky blue - pure and elegant */
-  letter-spacing: 1px;
+  font-size: 3.4rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: #e0f2ff;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.5px;
 }
 
-/* Login Button - Kept attractive but balanced */
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #cbd5e1;
+  margin-bottom: 50px;
+  line-height: 1.5;
+}
+
+/* Login Button */
 .login-button {
-  padding: 16px 55px;
-  background-color: #ffb703;     /* Bright gold */
+  display: inline-block;
+  padding: 16px 60px;
+  background: linear-gradient(135deg, #ffb703, #faa307);
   color: #0d1b2a;
   font-size: 1.25rem;
-  font-weight: bold;
-  border-radius: 50px;           /* Softer, modern pill shape */
+  font-weight: 700;
+  border-radius: 50px;
   text-decoration: none;
-  transition: all 0.4s ease;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
-  display: inline-block;
+  box-shadow: 0 10px 30px rgba(255, 183, 3, 0.4);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .login-button:hover {
-  background-color: #faa307;
-  transform: scale(1.08) translateY(-3px);
-  box-shadow: 0 12px 30px rgba(255, 183, 3, 0.4);
+  transform: scale(1.08) translateY(-4px);
+  box-shadow: 0 15px 40px rgba(255, 183, 3, 0.5);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .hero-overlay h1 {
+    font-size: 2.6rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+  }
+
+  .login-button {
+    padding: 14px 50px;
+    font-size: 1.15rem;
+  }
+
+  .top-nav {
+    padding: 16px 20px;
+  }
+
+  .nav-content h2 {
+    font-size: 1.6rem;
+  }
 }

@@ -1,96 +1,135 @@
-
+/* login.css - Professional Glassmorphism matching Admin */
 
 .login-container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0d1b2a;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-
-.login-bg {
+/* Background Image via CSS - Same as Admin & Home */
+.login-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  filter: brightness(70%) blur(2px); 
-  background-color: #3a7ca5;
+  filter: brightness(60%) blur(4px);
+  z-index: -1;
 }
 
-
+/* Login Card */
 .login-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px; 
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.15); 
-  backdrop-filter: blur(10px); 
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 50px 40px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 183, 3, 0.2);
   text-align: center;
-  color: #fffaea; 
+  z-index: 2;
 }
-
 
 .login-overlay h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #ffb703;
   margin-bottom: 30px;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
+.error-msg {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  font-size: 0.98rem;
+}
 
+/* Form Inputs */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
 .login-form input {
-  padding: 15px;
-  font-size: 1rem;
-  border-radius: 10px;
+  padding: 16px 20px;
   border: none;
-  outline: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 1.05rem;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.login-form input::placeholder {
+  color: #94a3b8;
 }
 
 .login-form input:focus {
-  border: 2px solid #ffb703;
+  outline: none;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0 3px rgba(255, 183, 3, 0.3);
 }
 
-
+/* Login Button */
 .login-button {
-  padding: 15px;
-  background-color: #ffb703;
+  margin-top: 10px;
+  padding: 16px;
+  background: linear-gradient(135deg, #ffb703, #faa307);
   color: #0d1b2a;
-  font-weight: bold;
-  font-size: 1.2rem;
-  border-radius: 12px;
+  font-size: 1.15rem;
+  font-weight: 700;
   border: none;
+  border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
   transition: all 0.3s ease;
 }
 
 .login-button:hover {
-  background-color: #faa307;
-  transform: scale(1.05);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(255, 183, 3, 0.5);
 }
 
-
+/* Footer Link */
 .login-footer {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #e0f7ff;
+  margin-top: 30px;
+  color: #cbd5e1;
+  font-size: 1.02rem;
 }
 
 .back-link {
-  color: #ffb703;
+  color: #4ade80;
   text-decoration: none;
+  font-weight: 600;
 }
 
 .back-link:hover {
   text-decoration: underline;
+}
+
+/* Responsive */
+@media screen and (max-width: 480px) {
+  .login-overlay {
+    padding: 40px 25px;
+    margin: 20px;
+    border-radius: 20px;
+  }
+
+  .login-overlay h1 {
+    font-size: 2.3rem;
+  }
 }

@@ -1,0 +1,181 @@
+/* ===== MAIN CONTAINER ===== */
+.admin-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0d1b2a;
+  overflow: hidden;
+  color: white;
+}
+
+/* ===== BACKGROUND ===== */
+.admin-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../../pics/jLd6H.jpg') no-repeat center center/cover;
+  filter: brightness(60%) blur(4px);
+  z-index: -1;
+}
+
+/* ===== NAVBAR ===== */
+.admin-top-nav {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: rgba(13, 27, 42, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 183, 3, 0.2);
+  z-index: 100;
+  padding: 18px 40px;
+}
+
+.admin-header-content {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-header-content h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #ffb703;
+}
+
+.admin-header-content p {
+  color: #a5b4fc;
+}
+
+/* ===== BUTTONS ===== */
+.admin-top-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-profile-btn,
+.admin-logout-btn {
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.admin-profile-btn {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.admin-logout-btn {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+/* ===== MAIN ===== */
+.admin-main {
+  padding: 60px;
+}
+
+/* ===== CARDS ===== */
+.admin-actions {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.action-card {
+  width: 300px;
+  padding: 30px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  text-align: center;
+}
+
+.action-card h2 {
+  color: #ffb703;
+}
+
+.action-card p {
+  color: #cbd5e1;
+}
+
+.action-card button {
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #ffb703, #faa307);
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(13, 27, 42, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.modal-card {
+  width: 400px;
+  padding: 30px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  text-align: center;
+}
+
+.modal-card h2 {
+  color: #ffb703;
+}
+
+/* ===== INPUTS ===== */
+.modal-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* ===== MODAL BUTTONS ===== */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.save-btn {
+  flex: 1;
+  padding: 12px;
+  background: #ffb703;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  flex: 1;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.2);
+  border: none;
+  border-radius: 10px;
+  color: #f87171;
+}
