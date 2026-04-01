@@ -1,0 +1,141 @@
+/* Parent Dashboard - Same glassmorphism style */
+.admin-container {
+  position: relative;
+  min-height: 100vh;
+  background: #0d1b2a;
+  padding: 40px 20px;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('../../pics/jLd6H.jpg') no-repeat center center/cover;
+  filter: brightness(60%) blur(4px);
+  z-index: -1;
+}
+
+.main-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.child-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  padding: 30px;
+  border-radius: 18px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 183, 3, 0.2);
+}
+
+.child-name {
+  color: white;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.class-level {
+  color: #ffb703;           /* Gold color as requested */
+  font-weight: 600;
+}
+
+h4 {
+  color: #ffb703;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.grade-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.grade-table th, .grade-table td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.grade-table th {
+  background: rgba(255, 183, 3, 0.2);
+  color: #ffb703;
+}
+
+.suggestion {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  line-height: 1.6;
+  color: #e0f2ff;
+  margin-top: 10px;
+}
+
+.no-data {
+  text-align: center;
+  color: #ccc;
+  font-size: 1.2rem;
+  padding: 60px 20px;
+}
+
+/* Modal styles (same as other pages) */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(13, 27, 42, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-box {
+  width: 420px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  border-radius: 18px;
+  padding: 30px;
+  color: white;
+}
+
+.modal-box input {
+  width: 100%;
+  padding: 14px;
+  margin: 12px 0;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 10px;
+  color: white;
+}
+
+.modal-footer {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+.confirm-btn, .cancel-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.confirm-btn {
+  background: #ffb703;
+  color: #0d1b2a;
+}
+
+.cancel-btn {
+  background: rgba(239, 68, 68, 0.6);
+  color: white;
+}

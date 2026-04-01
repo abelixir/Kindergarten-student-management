@@ -13,10 +13,12 @@ app.use(express.json());
 const loginRoute = require("./routes/login");
 const teacherRoute = require("./routes/teachers");
 const userRoute = require("./routes/user");
+const studentRoute = require("./routes/students");
 
 app.use("/api/login", loginRoute);
 app.use("/api/teachers", teacherRoute);
 app.use("/api/user", userRoute);
+app.use("/api/students", studentRoute);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
