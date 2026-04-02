@@ -11,11 +11,11 @@ function Parent() {
 
   const fetchData = async () => {
     try {
-      const studentRes = await fetch(`http://localhost:5000/api/students?parentId=${userId}`);
+      const studentRes = await fetch(`${process.env.REACT_APP_API_URL}/api/students?parentId=${userId}`);
       const studentData = await studentRes.json();
       setChildren(studentData);
 
-      const profileRes = await fetch(`http://localhost:5000/api/user/profile/${userId}`);
+      const profileRes = await fetch(`${process.env.REACT_APP_API_URL}/api/user/profile/${userId}`);
       const profileData = await profileRes.json();
       setProfile(profileData);
     } catch (err) {
@@ -31,7 +31,7 @@ function Parent() {
   const updateProfile = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/user/profile/${userId}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/user/profile/${userId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profile)

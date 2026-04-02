@@ -11,7 +11,7 @@ function ManageTeachers() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/teachers")
+    fetch(`${process.env.REACT_APP_API_URL}/api/teachers`)
       .then(res => res.json())
       .then(data => setTeachers(Array.isArray(data) ? data : []))
       .catch(err => console.error("Failed to load teachers", err));
@@ -33,7 +33,7 @@ function ManageTeachers() {
   const handleSubmit = async () => {
     try {
       if (mode === "add") {
-        const res = await fetch("http://localhost:5000/api/teachers", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teachers`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -44,7 +44,7 @@ function ManageTeachers() {
         }
       } 
       else if (mode === "edit") {
-        const res = await fetch(`http://localhost:5000/api/teachers/${selectedTeacher._id}`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teachers/${selectedTeacher._id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -56,7 +56,7 @@ function ManageTeachers() {
         }
       } 
       else if (mode === "delete") {
-        const res = await fetch(`http://localhost:5000/api/teachers/${selectedTeacher._id}`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teachers/${selectedTeacher._id}`, {
           method: "DELETE",
         });
         if (res.ok) {

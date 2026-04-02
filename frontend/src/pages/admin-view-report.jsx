@@ -7,7 +7,7 @@ function ViewReport() {
   const [selectedClass, setSelectedClass] = useState("KG1");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/students?classLevel=${selectedClass}`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/students?classLevel=${selectedClass}`)
       .then(res => res.json())
       .then(setStudents);
   }, [selectedClass]);

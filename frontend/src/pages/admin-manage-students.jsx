@@ -11,19 +11,17 @@ function ManageStudents() {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
 
+  const subjects = ["Maths", "English", "Amharic", "Science", "Art"];
+
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost:5000/api/students?classLevel=${selectedClass}`);
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/students?classLevel=${selectedClass}`);
         const data = await res.json();
-
-        if (!res.ok) throw new Error(data.message || "Failed to load students");
-
-        // SORT ALPHABETICALLY BY NAME
         const sorted = Array.isArray(data) 
-          ? data.sort((a, b) => a.name.localeCompare(b.name))
+          ? data.sort((a, b) => a.name.localeCompare(b.name)) 
           : [];
         setStudents(sorted);
       } catch (err) {
@@ -41,44 +39,50 @@ function ManageStudents() {
     setFormData({
       _id: student._id,
       name: student.name,
+      classLevel: student.classLevel,
       parentPhone: student.parentPhone || "",
-      // Full parent info (already populated by backend)
+      // Parent info for display only
       parentName: student.parentId?.name || "",
-      parentEmail: student.parentId?.email || "",
-      grade: student.grade || "",
-      teacherSuggestion: student.teacherSuggestion || ""
+      parentEmail: student.parentId?.email || ""
     });
     setShowModal(true);
   };
 
   const handleEditSubmit = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/students/${formData._id}`, {
+      const updateData = {
+        name: formData.name,
+        classLevel: formData.classLevel,
+        parentPhone: formData.parentPhone
+      };
+
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/students/${formData._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(updateData)
       });
-      if (!res.ok) throw new Error("Update failed");
-      setShowModal(false);
-      window.location.reload(); // refresh list
+
+      if (res.ok) {
+        setShowModal(false);
+        window.location.reload(); // Simple refresh
+      } else {
+        alert("Failed to update student");
+      }
     } catch (err) {
-      alert("Failed to update student");
+      alert("Error updating student");
     }
   };
 
   const deleteStudent = async (id) => {
-    if (!window.confirm("Delete this student and their parent account permanently?")) return;
+    if (!window.confirm("Delete this student permanently?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/students/${id}`, { method: "DELETE" });
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/students/${id}`, { method: "DELETE" });
       if (res.ok) {
         setStudents(prev => prev.filter(s => s._id !== id));
         alert("Student deleted successfully.");
-      } else {
-        const errorData = await res.json().catch(() => ({}));
-        alert(errorData.message || "Failed to delete");
       }
     } catch (err) {
-      alert("Error connecting to server");
+      alert("Error deleting student");
     }
   };
 
@@ -100,7 +104,7 @@ function ManageStudents() {
       {error && <p className="error-msg">{error}</p>}
 
       {loading ? (
-        <p className="no-data">Loading students...</p>
+        <p className="no-data">Loading...</p>
       ) : students.length === 0 ? (
         <p className="no-data">No students found in {selectedClass}</p>
       ) : (
@@ -109,10 +113,8 @@ function ManageStudents() {
             <thead>
               <tr>
                 <th>Student Name</th>
-                <th>Parent Name</th>
-                <th>Parent Email</th>
-                <th>Parent Phone</th>
-                <th>Grade</th>
+                <th>Class</th>
+                {subjects.map(sub => <th key={sub}>{sub}</th>)}
                 <th>Suggestion</th>
                 <th>Actions</th>
               </tr>
@@ -121,11 +123,13 @@ function ManageStudents() {
               {students.map(s => (
                 <tr key={s._id}>
                   <td>{s.name}</td>
-                  <td>{s.parentId?.name || "-"}</td>
-                  <td>{s.parentId?.email || "-"}</td>
-                  <td>{s.parentPhone || "-"}</td>
-                  <td>{s.grade || "-"}</td>
-                  <td>{s.teacherSuggestion || "-"}</td>
+                  <td>{s.classLevel}</td>
+                  {subjects.map(sub => (
+                    <td key={sub}><strong>{s.grades?.[sub] || "-"}</strong></td>
+                  ))}
+                  <td style={{ maxWidth: "280px", whiteSpace: "pre-wrap" }}>
+                    {s.suggestions || "-"}
+                  </td>
                   <td>
                     <button className="edit-btn" onClick={() => openEdit(s)}>Edit</button>
                     <button className="delete-btn" onClick={() => deleteStudent(s._id)}>Delete</button>
@@ -137,16 +141,41 @@ function ManageStudents() {
         </div>
       )}
 
-      {/* EDIT MODAL - FULL INFO */}
+      {/* Simplified Edit Modal - Admin can only edit basic info */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-box">
-            <h2>Edit Student</h2>
-            <input value={formData.name || ""} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Student Name" />
-            <input value={formData.parentName || ""} disabled placeholder="Parent Name (cannot change)" />
-            <input value={formData.parentEmail || ""} disabled placeholder="Parent Email" />
-            <input value={formData.parentPhone || ""} onChange={e => setFormData({...formData, parentPhone: e.target.value})} placeholder="Parent Phone" />
-           
+            <h2>Edit Student Info</h2>
+
+            <input 
+              value={formData.name || ""} 
+              onChange={e => setFormData({...formData, name: e.target.value})} 
+              placeholder="Student Name *" 
+            />
+
+            <select 
+              value={formData.classLevel || ""} 
+              onChange={e => setFormData({...formData, classLevel: e.target.value})}
+            >
+              <option value="KG1">KG1</option>
+              <option value="KG2">KG2</option>
+              <option value="KG3">KG3</option>
+            </select>
+
+            <input 
+              value={formData.parentPhone || ""} 
+              onChange={e => setFormData({...formData, parentPhone: e.target.value})} 
+              placeholder="Parent Phone" 
+            />
+
+            {/* Read-only fields */}
+            <input value={formData.parentName || ""} disabled placeholder="Parent Name (View Only)" />
+            <input value={formData.parentEmail || ""} disabled placeholder="Parent Email (View Only)" />
+
+            <p style={{ marginTop: "15px", fontStyle: "italic", color: "#666" }}>
+              Grades and Suggestion can only be edited by the assigned Teacher.
+            </p>
+
             <div className="modal-footer">
               <button className="confirm-btn" onClick={handleEditSubmit}>Save Changes</button>
               <button className="cancel-btn" onClick={() => setShowModal(false)}>Cancel</button>

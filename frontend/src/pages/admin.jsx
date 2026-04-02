@@ -19,7 +19,7 @@ function Admin() {
     if (!userId) return null;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/user/profile/${userId}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/user/profile/${userId}`);
       if (!res.ok) throw new Error("Failed to fetch profile");
       const data = await res.json();
       return data;
@@ -52,7 +52,7 @@ function Admin() {
     if (!userId) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/user/profile/${userId}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/user/profile/${userId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)

@@ -15,16 +15,17 @@ router.get("/", async (req, res) => {
 
     const students = await Student.find(query)
       .populate("teacherId", "name")
-      .populate("parentId", "name email");
+      .populate("parentId", "name email")
+      .sort({ name: 1 }); // Sort alphabetically by name
 
-    res.json(students);   // This must return array
+    res.json(students);
   } catch (err) {
     console.error("Get students error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// POST - Add student + create parent if not exists
+// POST - Add student + create parent
 router.post("/", async (req, res) => {
   try {
     const { name, classLevel, parentName, parentEmail, parentPassword, parentPhone, teacherId } = req.body;
@@ -49,7 +50,9 @@ router.post("/", async (req, res) => {
       classLevel,
       teacherId,
       parentId: parent._id,
-      parentPhone
+      parentPhone,
+      grades: {},        // initialize empty grades
+      suggestions: ""
     });
 
     await newStudent.save();
@@ -68,19 +71,18 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PUT - Update student
+// PUT - Update student (grades, suggestions, basic info)
 router.put("/:id", async (req, res) => {
   try {
     const updated = await Student.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
+      req.params.id,
+      req.body,
       { new: true }
     )
       .populate("teacherId", "name")
       .populate("parentId", "name email");
 
     if (!updated) return res.status(404).json({ message: "Student not found" });
-
     res.json(updated);
   } catch (err) {
     console.error("Update student error:", err);
@@ -88,26 +90,23 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// DELETE student + linked parent (only if no other students)
+// DELETE
 router.delete("/:id", async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
     if (!student) return res.status(404).json({ message: "Student not found" });
 
-    // Delete parent only if this is the only student for that parent
     if (student.parentId) {
       const otherStudentsCount = await Student.countDocuments({
         parentId: student.parentId,
         _id: { $ne: student._id }
       });
-
       if (otherStudentsCount === 0) {
         await User.findByIdAndDelete(student.parentId);
       }
     }
 
     await Student.findByIdAndDelete(req.params.id);
-
     res.json({ message: "Student deleted successfully" });
   } catch (err) {
     console.error("Delete student error:", err);

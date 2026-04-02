@@ -2,26 +2,45 @@
 const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  classLevel: { 
+  name: { 
     type: String, 
     required: true, 
-    enum: ["KG1", "KG2", "KG3"] 
+    trim: true 
   },
-  teacherId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: "User", 
-    required: true 
+  classLevel: {
+    type: String,
+    required: true,
+    enum: ["KG1", "KG2", "KG3"]
   },
-  parentId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: "User" 
+  teacherId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   },
-  parentPhone: { type: String, trim: true },
+  parentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  parentPhone: { 
+    type: String, 
+    trim: true 
+  },
 
-  // NEW FIELDS FOR TEACHER DASHBOARD
-  grade: { type: String, default: "" },           // e.g. "A", "B+", "85"
-  teacherSuggestion: { type: String, default: "" } // teacher's note / suggestion
+  // === NEW: Subjects with grades ===
+  grades: {
+    Maths: { type: String, default: "" },
+    English: { type: String, default: "" },
+    Amharic: { type: String, default: "" },
+    Science: { type: String, default: "" },
+    Art: { type: String, default: "" }
+  },
+
+  // Teacher's suggestion / note
+  suggestions: { 
+    type: String, 
+    default: "" 
+  }
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("Student", studentSchema);
