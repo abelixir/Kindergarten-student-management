@@ -6,8 +6,13 @@ require("dotenv").config();
 const app = express();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
+
+// CORS setup - allow your deployed frontend
+app.use(cors({
+  origin: 'https://kindergarten-frontend-gy4c.onrender.com', // your frontend URL
+  credentials: true
+}));
 
 // Routes
 const loginRoute = require("./routes/login");
