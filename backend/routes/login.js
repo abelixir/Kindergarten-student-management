@@ -6,8 +6,18 @@ router.post("/", async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
+    }
+
     const user = await User.findOne({ email });
-    if (!user || user.password !== password) {
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Simple password check (replace with bcrypt if you hash passwords)
+    if (user.password !== password) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
@@ -20,6 +30,7 @@ router.post("/", async (req, res) => {
     });
 
   } catch (err) {
+    console.error("Login route error:", err); // <-- important for Render logs
     res.status(500).json({ message: "Server error" });
   }
 });
